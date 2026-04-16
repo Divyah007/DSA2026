@@ -1,0 +1,13 @@
+Reference link: https://takeuforward.org/dsa/strivers-a2z-sheet-learn-dsa-a-to-z
+-Index
+
+1. LEARN THE BASICS
+    1. Things to know in Java
+        1. Input Output - refer UserInputOutput.java
+        2. Cpp Basics (Covered only Java not Cpp) & 5. What are arrays, strings? - refer Arrays.txt,String.txt
+        3. ElseIf -refer IfElseIfElseAndSwitch.txt, IfElsestatements.java
+        4. Switch Case - refer SwitchCase.java
+        6. For loops & 7. While loops - refer Loops.txt
+        8. Functions (Pass by Reference and Value) - refer function.txt
+        9. Theory with examples - timeAndSpaceComplexity.txt
+

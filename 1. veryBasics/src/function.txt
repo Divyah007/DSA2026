@@ -1,0 +1,44 @@
+Functions (Pass by Reference and Value)
+===============
+You take a photocopy of their resume and edit it. Their original stays unchanged. (This is pass by value)
+You take the actual resume and make edits. Now, their original resume is changed. (This is pass by reference)
+
+
+Feature	                            Pass by Value	                                    Pass by Reference
+What is passed?	                    Copy of the variable	                            Reference (address) of the variable
+Original data modified?	            No	                                                Yes
+Used for?	                        Safety, when you don’t want to alter original	    Efficiency or when modifying original is needed
+Memory Usage	                    More (due to copies)	                            Less
+
+
+Primitive (Pass by Value)
+=========================
+public class Main {
+    static void modify(int a) {
+        a = a + 10;
+    }
+
+    public static void main(String[] args) {
+        int x = 5;
+        modify(x);
+        System.out.println(x); // Output: 5
+    }
+}
+
+Objects (Pass reference by value)
+===================
+class Wrapper {
+    int value = 5;
+}
+
+public class Main {
+    static void modify(Wrapper obj) {
+        obj.value += 10;
+    }
+
+    public static void main(String[] args) {
+        Wrapper w = new Wrapper();
+        modify(w);
+        System.out.println(w.value); // Output: 15
+    }
+}

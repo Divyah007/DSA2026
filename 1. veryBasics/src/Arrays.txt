@@ -1,0 +1,545 @@
+---------------------------------------------------------
+ARRAYS
+-----------------------------------------------------------------------
+Homogeneous elements that have contiguous memory locations i.e One after another.
+the process of finding or performing operations on an element becomes very fast because your computer very well knows where
+the value is located in the memory.
+After the array is created the memory is allocated instantly
+Note:
+int[] a = new int[]; // ❌ Compilation Error
+size of the array are fixed and defined when you create it
+Arrays store elements in CONTIGUOUS (continuous/adjacent) memory locations.Contiguous = Next to each other, NO GAPS
+Arrays store elements of the same type (homogeneous).
+----
+How arrays are stored?
+int i = 20;      // 4 bytes (addresses 1000, 1001, 1002, 1003)
+
+int[] arr = {10, 20, 30};
+
+Memory:
+Address  Byte     Value    Element
+1000  → [00]  ┐
+1001  → [00]  ├─→ 10     arr[0]
+1002  → [00]  │
+1003  → [0A]  ┘
+1004  → [00]  ┐
+1005  → [00]  ├─→ 20     arr[1]
+1006  → [00]  │
+1007  → [14]  ┘
+1008  → [00]  ┐
+1009  → [00]  ├─→ 30     arr[2]
+1010  → [00]  │
+1011  → [1E]  ┘
+
+Index:    0      1      2      3      4
+        ┌──────┬──────┬──────┬──────┬──────┐
+Value:  │  10  │  20  │  30  │  40  │  50  │
+        └──────┴──────┴──────┴──────┴──────┘
+Address: 1000   1004   1008   1012   1016
+
+The Formula to insert:
+```
+Next element address = base address + (i*Size of data type)
+
+base address=1000
+
+For int (4 bytes):
+arr[0] starts at: 1000
+arr[1] starts at: 1004
+arr[2] starts at: 1008
+arr[3] starts at: 1012
+
+When we say:
+> "arr[0] is at address 1000"
+
+We mean:
+> "arr[0] **STARTS** at address 1000 and occupies 1000-1003"
+------------------------------------------------------------------------
+Who decides the Base Address?
+The base address is decided by the JVM (Java Virtual Machine) in coordination with the Operating System (OS).
+for ex.
+int[] arr= new int[5]
+The Request: When you run new int[5], the JVM looks at the Heap Memory and asks the OS for a contiguous (unbroken) block of memory large enough to hold 5 integers (20 bytes).
+The Allocation: The OS identifies a "hole" in the RAM that is empty and big enough. It "marks" that area as reserved for your program.
+The Assignment: The OS tells the JVM, "I found space starting at address 0x7A41." The JVM then assigns 0x7A41 as the base address to your variable "arr".
+----------------------------------------------------------------------
+ex.
+arr[3] = 7;
+
+1. Compiler: "I've written a plan(i.e formula): take the Base Address, add the Index, and multiply by 4." ie. base address + (i*4)
+2. CPU (Registers): "I've grabbed the Base Address (1000) and the Index from memory. and also I know the size of the data type is 4 which was provided by the complier"
+3. CPU (AGU): "I've done the math.
+base address + (i*4)= 1000+ (3*4)= 1012
+The target is Address 1012."
+4.CPU(Memory Controller): "I'm heading to RAM Row 1012 now.
+5. CPU -then based on the instruction read/write operation is done.
+------------------------------------------------------------------
+Why are Arrays ‘0’ indexed?
+
+
+Base Address= 1000
+
+With 0-indexing (Current System): Formula to Access Array Element:
+Address of arr[i] = Base Address + (i × size of element)
+
+To access arr[3]:
+Address = 1000 + (3 × 4)
+        = 1000 + 12
+        = 1012 ✓
+Simple calculation!
+
+----
+With 1-indexing (If arrays started at 1):
+
+Address of arr[i] = Base Address + ((i-1) × size of element)
+
+To access arr[3]:
+Address = 1000 + ((3 - 1) × 4)
+        = 1000 + (2 × 4)
+        = 1000 + 8
+        = 1008
+
+Extra subtraction operation! ✗
+---
+0-indexed (Efficient):
+java// CPU calculation: 1 multiplication + 1 addition
+arr[i] → Base + (i × 4)
+
+1-indexed (Less Efficient):
+java// CPU calculation: 1 subtraction + 1 multiplication + 1 addition
+arr[i] → Base + ((i - 1) × 4)
+
+0-indexed: multiplication + addition --> efficient
+1-indexed:  subtraction + multiplication + addition --> less efficient
+---------------------
+
+what does index means in array?
+
+Indexed means CPU can calculate the location instantly using the formula: Address = Base + (Index × Size)
+
+Real life Scenario: You have boxes in a warehouse
+Warehouse :
+┌─────┬─────┬─────┬─────┬─────┬─────┐
+│Box 0│Box 1│Box 2│Box 3│Box 4│Box 5│
+└─────┴─────┴─────┴─────┴─────┴─────┘
+  0m    2m    4m    6m    8m   10m
+  ↑
+Starting position (Base address)
+wkt,
+Warehouse starts at position 0 meters (base address)
+Each box is 2 meters wide (size of element)
+now to find where box three is located,
+
+Base position: 0 meters
+Box number (index): 3
+Size of each box: 2 meters
+
+Position = 0 + (3 × 2)
+           = 0 + 6
+           = 6 meters from start
+
+Walk 6 meters from entrance → You find Box 3! ✓
+
+------------------------------
+What is index?
+
+A pointer or indicator that helps you locate or identify something quickly.
+A reference, pointer, or indicator that helps you quickly locate, identify, or access something without searching through everything.
+
+ex.  Book Index
+INDEX
+───────────────────
+Algorithm ........... 45
+Arrays .............. 78
+Binary Search ....... 102
+Data Structures ..... 120
+───────────────────
+
+Purpose: Quickly find topics without reading entire book!
+Index = Page number that points to information
+
+Index means,
+Pointer/Reference to something
+Quick lookup mechanism
+Organized way to find things
+Saves time (no searching through everything)
+
+Without Index:
+Search through everything
+Slow and tedious
+Time-consuming
+
+With Index:
+Jump directly to what you need
+Fast and efficient
+Saves time
+
+ex.
+Database Index:
+───────────────────────────
+Student ID → Record Location
+100001 → Row 5
+100002 → Row 12
+100003 → Row 8
+───────────────────────────
+
+Purpose: Find records quickly without scanning entire database!
+Index = Fast lookup structure
+--------------------------------
+time and space complexity of indexing in arrays:
+
+ex.
+int[] arr = {10, 20, 30, 40, 50};
+int x = arr[3]; --> to fing a[3]
+
+time complexity:
+1. Load base address: 1000          → O(1)
+2. Load index: 3                    → O(1)
+3. Load element size: 4             → O(1)
+4. Calculate: 1000 + (3 × 4)
+   • Multiplication: (3*4) =12 → O(1)
+   • Addition: 1000 + 12 =1012 → O(1)
+5. Access element at memory 1012       → O(1)
+
+total time complexity= o(1)+o(1)+o(1)+o(1)+o(1)+o(1)=o(6)=fixed constant time=o(1)
+
+space complexity:
+1. Array itself -Input (don't count)
+2. Base address: 8 bytes -> o(1)
+3.Index variable: 4 bytes -> o(1)
+4. Calculate: 1000 + (3 × 4) --> no data is stored in ram, ie. calculation is not stored in ram
+   • Multiplication: (3*4) =12  (4 bytes)
+   • Addition: 1000 + 12 =1012 (8 bytes)
+   → its just temporary value in a CPU register and not stored data,These calculations happen in CPU registers,
+   not in separate memory allocations
+   A CPU register is a TINY, SUPER-FAST storage location INSIDE the CPU chip itself.
+   CPU Registers are TEMPORARY storage. Data is lost when:
+       The register is overwritten with new data
+       The CPU switches to another task
+       The computer loses power
+   Registers do NOT permanently store data!
+5. element present on 1012 is (4 bytes)- its is the part of input array (don't count)
+total space complexity= o(1)+o(1)=o(2)=fixed constant space=o(1)
+total space complexity in bytes= 8 bytes+4 bytes  = 12 bytes
+----------------------------------------------------------
+
+for space complexity what we need to consider?
+
+Space Complexity =  EXTRA RAM used by the ALGORITHM
+
+What should be counted:
+✅ Variables created in RAM
+✅ Arrays/Lists created in RAM
+✅ Objects created in RAM
+✅ Recursion call stack (in RAM)
+✅ Data structures created (in RAM)
+
+What should not be counted:
+❌ Input data (given to you)
+❌ Output data (you have to produce anyway)
+❌ CPU registers (temporary, not "stored")
+❌ Code itself (instructions)
+❌ anything outside the method/ algorithm
+
+----------------------------------------------------------------------------------
+BASE ADDRESS:
+int[] arr = new int[5];
+
+1. THE ARRAY ITSELF (in HEAP):
+   ┌────────────────────────────┐
+   │ [10, 20, 30, 40, 50]      │  ← Actual data
+   └────────────────────────────┘
+   Memory address: 1000 (example)
+
+2. THE REFERENCE/POINTER (on STACK):
+   ┌──────────────┐
+   │ arr = 1000   │  ← Stores base address!
+   └──────────────┘
+   This is the "base address pointer"
+
+---------------------------------------------------
+
+time and space complexity of an array operation
+
+# ✅ **QUICK REFERENCE CHEAT SHEET:**
+```
+┌─────────────────────────────────────────┐
+│  OPERATION          TIME      SPACE    │
+├─────────────────────────────────────────┤
+│  Access             O(1)      O(1)     │
+│  Update             O(1)      O(1)     │
+│  Search unsorted    O(n)      O(1)     │
+│  Insert end         O(1)     O(1)     │
+│  Insert start       O(n)      O(1)     │
+│  Delete end         O(1)      O(1)     │
+│  Delete start       O(n)      O(1)     │
+│  Traverse           O(n)      O(1)     │
+│  Reverse            O(n)      O(1)     │
+│  Copy               O(n)      O(n)     │
+└─────────────────────────────────────────┘
+
+1️⃣ ACCESS BY INDEX
+javaint x = arr[5];
+```
+
+**Time: O(1)** ⚡
+```
+Steps:
+1. Calculate: base + (index × size) → O(1)
+2. Access memory → O(1)
+Total: O(1) ✓
+```
+
+**Space: O(1)**
+```
+Extra memory:
+- Index variable: 4 bytes
+- Result variable: 4 bytes
+Total: O(1) ✓
+
+----
+2️⃣ SEARCH (UNSORTED ARRAY)
+public int linearSearch(int[] arr, int target) {
+    for (int i = 0; i < arr.length; i++) {
+        if (arr[i] == target) {
+            return i;
+        }
+    }
+    return -1;
+}
+```
+
+**Time: O(n)** 🐌
+```
+Best case: O(1) - Found at first position
+Average case: O(n/2) = O(n) - Found in middle
+Worst case: O(n) - Not found or at end
+
+Must check each element in worst case!
+```
+
+**Space: O(1)**
+```
+Extra memory:
+- i variable: 4 bytes
+- target parameter: 4 bytes (input, but count for analysis)
+Total: O(1) ✓
+---------
+3⃣ INSERT AT END
+// Assuming space available
+arr[size] = newElement;
+size++;
+```
+
+**Time: O(1)*** ⚡
+```
+*Assuming space is available!
+
+If array is full → O(n) to resize and copy!
+
+Just assign to next position: O(1) ✓
+```
+
+**Space: O(1)**
+```
+No extra array needed (if space available)
+Just modify existing array
+------
+4.INSERT AT BEGINNING
+public void insertAtBeginning(int[] arr, int element, int size) {
+    // Shift all elements right
+    for (int i = size - 1; i >= 0; i--) {
+        arr[i + 1] = arr[i];
+    }
+    arr[0] = element;
+}
+```
+
+**Time: O(n)** 🐌
+```
+Before: [10, 20, 30, 40, 50]
+Insert 5 at beginning:
+
+Step 1: Shift 50 → [10, 20, 30, 40, 50, 50]
+Step 2: Shift 40 → [10, 20, 30, 40, 40, 50]
+Step 3: Shift 30 → [10, 20, 30, 30, 40, 50]
+Step 4: Shift 20 → [10, 20, 20, 30, 40, 50]
+Step 5: Shift 10 → [10, 10, 20, 30, 40, 50]
+Step 6: Insert 5 → [5, 10, 20, 30, 40, 50]
+
+Must shift n elements → O(n) operations!
+```
+
+**Space: O(1)**
+```
+In-place operation
+Only loop variable i: 4 bytes
+----------------
+5. INSERT AT MIDDLE (Index k)
+public void insertAt(int[] arr, int index, int element, int size) {
+    for (int i = size - 1; i >= index; i--) {
+        arr[i + 1] = arr[i];
+    }
+    arr[index] = element;
+}
+```
+
+**Time: O(n)** 🐌
+```
+Insert at index 2:
+[10, 20, 30, 40, 50]
+          ↑ Insert 25 here
+
+Must shift: 30, 40, 50 (3 elements)
+
+Average case: Shift n/2 elements = O(n)
+Worst case: Insert at beginning = O(n)
+```
+
+**Space: O(1)**
+```
+In-place operation
+Only i variable: 4 bytes
+-----------
+6. DELETE AT END
+
+size--;  // Just decrease size
+```
+
+**Time: O(1)** ⚡
+```
+No shifting needed!
+Just mark as "unused"
+[10, 20, 30, 40, 50] size=5
+                  ↓
+[10, 20, 30, 40] size=4 (50 still there but ignored)
+```
+
+**Space: O(1)**
+```
+No extra memory
+-------------
+7. DELETE AT BEGINNING
+public void deleteFirst(int[] arr, int size) {
+    for (int i = 0; i < size - 1; i++) {
+        arr[i] = arr[i + 1];
+    }
+    size--;
+}
+```
+
+**Time: O(n)** 🐌
+```
+[10, 20, 30, 40, 50] → Delete 10
+
+Shift left:
+[20, 30, 40, 50, 50]  Step 1
+[20, 30, 40, 50]      Step 2 (size--)
+
+Must shift n-1 elements → O(n)
+```
+
+**Space: O(1)**
+```
+In-place operation
+------------------------
+8.  DELETE AT MIDDLE (Index k)
+
+public void deleteAt(int[] arr, int index, int size) {
+    for (int i = index; i < size - 1; i++) {
+        arr[i] = arr[i + 1];
+    }
+    size--;
+}
+```
+
+**Time: O(n)** 🐌
+```
+Average: Shift n/2 elements = O(n)
+Worst: Delete at beginning = O(n)
+
+Space: O(1)
+-----------
+9. UPDATE BY INDEX
+   javaarr[3] = 100;
+   ```
+
+   **Time: O(1)** ⚡
+   ```
+   Direct access: base + (3 × size) → O(1)
+   Space: O(1)
+
+  --------------
+ 10. TRAVERSE/ITERATE
+     javafor (int i = 0; i < arr.length; i++) {
+         System.out.println(arr[i]);
+     }
+     ```
+
+     **Time: O(n)**
+     ```
+     Must visit each element once
+     n elements → n operations
+     ```
+
+     **Space: O(1)**
+     ```
+     Only loop variable i: 4 bytes
+
+     ---------------
+     11. REVERSE ARRAY
+     public void reverse(int[] arr) {
+         int left = 0;
+         int right = arr.length - 1;
+
+         while (left < right) {
+             // Swap
+             int temp = arr[left];
+             arr[left] = arr[right];
+             arr[right] = temp;
+
+             left++;
+             right--;
+         }
+     }
+     ```
+
+     **Time: O(n)**
+     ```
+     [10, 20, 30, 40, 50]
+      ↓            ↓
+     Swap 10 and 50
+
+     [50, 20, 30, 40, 10]
+          ↓      ↓
+     Swap 20 and 40
+
+     [50, 40, 30, 20, 10] ✓
+
+     n/2 swaps = O(n)
+     ```
+
+     **Space: O(1)**
+     ```
+     In-place! Only 3 variables:
+     - left: 4 bytes
+     - right: 4 bytes
+     - temp: 4 bytes
+     --------------------
+     12. COPY ARRAY
+         javaint[] copy = new int[arr.length];
+         for (int i = 0; i < arr.length; i++) {
+             copy[i] = arr[i];
+         }
+         ```
+
+         **Time: O(n)**
+         ```
+         Must copy each element
+         ```
+
+         **Space: O(n)**
+         ```
+         New array of size n created!
+         ```
+------------------

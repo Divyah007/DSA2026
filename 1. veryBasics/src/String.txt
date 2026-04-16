@@ -1,0 +1,568 @@
+String
+=========
+Strings are like a series of characters stored in a specific order.
+Each character in a string is assigned an index, starting from 0
+This means the first character is at index 0, the second character at index 1, and so on.
+zero-based indexing is a fundamental concept in working with strings
+
+Ex.
+String s = "Hello World";
+s.length(); --> length of a string
+s.charAt(i)--> access character at index i
+
+---------
+few String creation ways
+1. using string literal
+
+String a="hello";
+"hello" is stored in "string pool" which is a memory area inside heap.
+     1. JVM checks String Pool for "hello"
+     2. If found → Reuse existing object
+     3. If not found → Create new object in String Pool
+     4. Variable 'a' points to that object
+
+                                                Memory:
+                                        ┌─────────────────────────────┐
+                                        │  HEAP MEMORY                │
+                                        │  ┌────────────────────────┐ │
+                                        │  │  String Pool (inside)  │ │
+                                        │  │  ┌──────────────────┐  │ │
+                                        │  │  │  "hello"  ←─ a   │  │ │
+                                        │  │  └──────────────────┘  │ │
+                                        │  └────────────────────────┘ │
+                                        └─────────────────────────────┘
+
+String b= "hello"
+                                                Memory:
+                                        ┌─────────────────────────────┐
+                                        │  HEAP MEMORY                │
+                                        │  ┌────────────────────────┐ │
+                                        │  │  String Pool (inside)  │ │
+                                        │  │  ┌──────────────────┐  │ │
+                                        │  │  │  "hello"←─ a,b   │  │ │
+                                        │  │  └──────────────────┘  │ │
+                                        │  └────────────────────────┘ │
+                                        └─────────────────────────────┘
+so,
+a==b-->true i.e both a and b are pointing to same object i.e "hello"
+a.equals(b)--> true i.e content of a and b are same
+-----
+2. using new keyword
+
+ String c= new String("hi");
+ here "hi" is stored heap, since it is created using new keyword.
+
+ 1. jvm Creates "hi" in String Pool (if not exists)
+ 2. Creates NEW String object in Heap
+ 3. Copies value from pool to new object
+ 4. Variable 'c' points to heap object (NOT pool!)
+
+ Memory:
+ ┌─────────────────────────────────────┐
+ │  HEAP MEMORY                        │
+ │  ┌────────────────────────┐         │
+ │  │  String Pool           │         │
+ │  │  ┌──────────────────┐  │         │
+ │  │  │  "hi"            │  │         │
+ │  │  └──────────────────┘  │         │
+ │  └────────────────────────┘         │
+ │                                     │
+ │  ┌────────────────────────┐         │
+ │  │  Regular Heap Area     │         │
+ │  │  ┌──────────────────┐  │         │
+ │  │  │  "hi"  ←─ c      │  │         │
+ │  │  └──────────────────┘  │         │
+ │  └────────────────────────┘         │
+ └─────────────────────────────────────┘
+
+ TWO "hi" objects created!
+ One in pool, one in heap!
+
+
+ String d= new String("hi");
+ Memory:
+  ┌─────────────────────────────────────┐
+  │  HEAP MEMORY                        │
+  │  ┌────────────────────────┐         │
+  │  │  String Pool           │         │
+  │  │  ┌──────────────────┐  │         │
+  │  │  │  "hi"            │  │         │
+  │  │  └──────────────────┘  │         │
+  │  └────────────────────────┘         │
+  │                                     │
+  │  ┌────────────────────────┐         │
+  │  │  Regular Heap Area     │         │
+  │  │  ┌──────────────────┐  │         │
+  │  │  │  "hi"  ←─ c      │  │         │
+  │  │  └──────────────────┘
+
+             hi -->d│         │
+  │  └────────────────────────┘         │
+  └─────────────────────────────────────┘
+
+
+   One "hi" in pool, two "hi" in heap
+
+   so,
+   c==d-->false i.e both a and b are pointing to different  objects
+   c.equals(d)--> true i.e content of c and d are same
+
+note 1:
+   String x= "world";
+   String y= new String("world");
+
+ Memory:
+ ┌─────────────────────────────────────┐
+ │  HEAP MEMORY                        │
+ │  ┌────────────────────────┐         │
+ │  │  String Pool           │         │
+ │  │  ┌──────────────────┐  │         │
+ │  │  │  "world"  -->x         │  │         │
+ │  │  └──────────────────┘  │         │
+ │  └────────────────────────┘         │
+ │                                     │
+ │  ┌────────────────────────┐         │
+ │  │  Regular Heap Area     │         │
+ │  │  ┌──────────────────┐  │         │
+ │  │  │  "world"  ←─ y      │  │         │
+ │  │  └──────────────────┘  │         │
+ │  └────────────────────────┘         │
+ └─────────────────────────────────────┘
+
+
+ One in pool, one in heap
+ x==y --> false
+ x.equals(y)-->true
+ -----
+ note 2:
+
+ String s1 = "hello";
+ String s2 = "hello";
+
+ s1 == s2--> // true
+ s1.equals(s2)--> true
+
+ Memory:
+ ┌────────────────────────┐
+ │  String Pool           │
+ │  ┌──────────────────┐  │
+ │  │  "hello" ←─┬─ s1 │  │
+ │  │           └─ s2 │  │
+ │  └──────────────────┘  │
+ └────────────────────────┘
+
+-----
+note 3:
+String s3 = new String("hello");
+String s4 = new String("hello");
+
+s3 == s4 --> false
+
+Memory:
+┌──────────────────────────────────┐
+│  String Pool                     │
+│  ┌────────────────────┐          │
+│  │  "hello"           │          │
+│  └────────────────────┘          │
+│                                  │
+│  Regular Heap                    │
+│  ┌────────────────────┐          │
+│  │  "hello" ←─ s3     │          │
+│  └────────────────────┘          │
+│  ┌────────────────────┐          │
+│  │  "hello" ←─ s4     │          │
+│  └────────────────────┘          │
+└──────────────────────────────────┘
+
+ ---
+------
+STRING POOL (String Constant Pool):
+     Special memory area inside Heap
+     Purpose: Avoid duplicate String objects
+     Also called: String Intern Pool
+     Location: Inside Heap Memory (Java 7+)
+              (Was in PermGen before Java 7)
+-----
+✅ Literals = Pool (efficient)
+✅ new = Heap (wasteful)
+--------------
+String immutability:
+
+Example A:
+String a = "hello";
+String Pool:
+┌──────────────────────┐
+│  "hello" ←─ a        │
+└──────────────────────┘
+
+a = a + "bye";
+What happens internally:
+    1. Read value of 'a' → "hello"
+    2. Read literal "bye" → "bye"
+    3. Concatenate → "hellobye"
+    4. Create NEW String object "hellobye"
+    5. Variable 'a' now points to NEW object
+    6. OLD "hello" object is abandoned!
+
+"hello" object is NOT modified! A NEW "hellobye" object is created!
+
+String Pool:
+┌──────────────────────┐
+│  "hello"             │  ← Old object (abandoned!)
+│                      │
+│  "bye"               │
+│                      │
+│  "hellobye" ←─ a     │  ← NEW object!
+└──────────────────────┘
+
+"hello" still exists unchanged!
+'a' now points to different object!
+
+ex.
+String s = "hello";
+s.concat(" world");  // Concatenate
+
+System.out.println(s);  // Prints: "hello"
+// NOT "hello world"!
+
+Why? concat() creates NEW String
+But we didn't save it!
+
+Correct way:
+s = s.concat(" world");  // Save the NEW object
+System.out.println(s);  // Now prints: "hello world"
+
+Example B:
+
+String a = new String("hello");
+pool:
+┌──────────────────────┐
+│  "hello"       │
+└──────────────────────┘
+Heap:
+┌──────────────────────┐
+│  "hello" ←─ a        │
+└──────────────────────┘
+
+a = a + new String("bye");
+
+pool:
+┌──────────────────────┐
+│  "hello"       │
+   "bye"
+
+└──────────────────────┘
+Heap:
+┌──────────────────────┐
+│  "hello"       │
+"bye"
+hellobye ←─ a
+└──────────────────────┘
+"hello" object is NOT modified! A NEW "hellobye" object is created!
+
+Where does the new object live? It lives in the Regular Heap, not the String Pool.
+ Because you used + and new at runtime, the JVM allocates the memory for "hellobye" in the Regular Heap.
+ When you use the + operator with a variable (like a + ...), the concatenation happens at runtime
+
+Example C:
+
+String a = new String("hello");
+
+pool:
+┌──────────────────────┐
+│  "hello"       │
+└──────────────────────┘
+Heap:
+┌──────────────────────┐
+│  "hello" ←─ a        │
+└──────────────────────┘
+
+a = a + "bye";
+
+
+"hello" object is NOT modified! A NEW "hellobye" object is created!
+
+pool:
+┌──────────────────────┐
+│  "hello"       │
+"bye"
+└──────────────────────┘
+
+heap:
+┌──────────────────────┐
+│  "hello"             │  ← Old object (abandoned!)         │
+│                      │
+│  "hellobye" ←─ a     │  ← NEW object!
+
+Where does the new object live? It lives in the Regular Heap, not the String Pool.
+ Because you used + and new at runtime, the JVM allocates the memory for "hellobye" in the Regular Heap.
+ -----
+ string, string, buffer, stringbuilder
+
+Feature	            String	                                StringBuffer	            StringBuilder
+Mutability	        ❌ Immutable	                        ✅ Mutable	                ✅ Mutable
+Thread-Safe	         ✅ Yes	                                ✅ Yes (synchronized)	    ❌ No
+Performance	         🐌 Slow (loops)	                     🐢 Medium	                ⚡ Fast
+Memory	             🗑️ Wasteful (creates many objects)	    💾 Efficient	             💾 Efficient
+When to use	        Few operations	                        Multi-threaded	            Single-threaded
+----------
+String:
+String s = "hello";
+Properties:
+
+❌ Immutable - Cannot be modified
+✅ Thread-safe - Immutability ensures safety
+🐌 Slow for concatenation in loops
+🗑️ Wasteful - Creates many temporary objects
+📦 Stored in String Pool
+
+----------------
+concatenation in string
+String s = "hello";
+s = s + " world";
+s = s + "!";
+```
+
+**What happens internally:**
+```
+Step 1: s = "hello"
+Memory:
+  s → ["hello"]  (Object 1)
+
+Step 2: s = s + " world"
+  • Creates "hello world" (Object 2)
+  • Discards "hello" (Object 1) ❌
+  s → ["hello world"]
+
+Step 3: s = s + "!"
+  • Creates "hello world!" (Object 3)
+  • Discards "hello world" (Object 2) ❌
+  s → ["hello world!"]
+
+Total objects created: 3
+Objects used: 1
+Waste: 2 objects! 🗑️
+--------
+1. String Concatenation:
+javaString s1 = "Hello";
+String s2 = " World";
+
+// Method 1: + operator
+String result = s1 + s2;
+
+// Method 2: concat()
+String result = s1.concat(s2);
+
+// Both create NEW objects!
+---------------
+stringbuffer:
+StringBuffer sb = new StringBuffer("hello");
+Properties:
+
+✅ Mutable - Can be modified in-place
+✅ Thread-safe - All methods synchronized
+🐢 Medium speed - Slower than StringBuilder due to synchronization
+💾 Memory efficient - Modifies same object
+📦 Stored in Regular Heap
+------------------
+concatenation in stringbuffer
+
+StringBuilder sb = new StringBuilder("hello");
+sb.append(" world");
+sb.append("!");
+```
+
+**What happens internally:**
+```
+Exactly same as StringBuffer!
+
+Step 1: sb = new StringBuilder("hello")
+  sb → [char[] {'h','e','l','l','o'}]
+
+Step 2: sb.append(" world")
+  sb → [char[] {'h','e','l','l','o',' ','w','o','r','l','d'}]
+       Same object, modified!
+
+Step 3: sb.append("!")
+  sb → [char[] {'h','e','l','l','o',' ','w','o','r','l','d','!'}]
+       Same object, modified!
+
+Total objects: 1 ✓
+Difference: NO synchronization = FASTER! ⚡
+---------
+StringBuilder:
+StringBuilder sb = new StringBuilder("hello");
+Properties:
+
+✅ Mutable - Can be modified in-place
+❌ NOT Thread-safe - No synchronization
+⚡ Fastest - No synchronization overhead
+💾 Memory efficient - Modifies same object
+📦 Stored in Regular Heap
+-------
+concatenation in stringbuilder
+StringBuilder sb = new StringBuilder("hello");
+sb.append(" world");
+sb.append("!");
+```
+
+**What happens internally:**
+```
+Exactly same as StringBuffer!
+
+Step 1: sb = new StringBuilder("hello")
+  sb → [char[] {'h','e','l','l','o'}]
+
+Step 2: sb.append(" world")
+  sb → [char[] {'h','e','l','l','o',' ','w','o','r','l','d'}]
+       Same object, modified!
+
+Step 3: sb.append("!")
+  sb → [char[] {'h','e','l','l','o',' ','w','o','r','l','d','!'}]
+       Same object, modified!
+
+Total objects: 1 ✓
+Difference: NO synchronization = FASTER! ⚡
+------------
+Stringbuilder and stringbuilder size
+--
+Case 1: Default Constructor
+StringBuffer sb = new StringBuffer();
+
+No initial string
+Default capacity: 16
+
+Capacity = 16 ✓
+-----
+Case 2: Constructor with String
+
+ StringBuffer sb = new StringBuffer("hello");
+
+   Initial string: "hello" (length = 5)
+   Extra buffer space: 16
+
+   Capacity = 5 + 16 = 21 ✓
+--
+Case 3: Constructor with Specified Capacity
+javaStringBuffer sb = new StringBuffer(50);
+```
+
+**Capacity:**
+```
+You specify: 50
+
+Capacity = 50 ✓
+----
+When Capacity is Exceeded:
+
+StringBuffer sb = new StringBuffer("hello");
+// Length: 5, Capacity: 21
+
+// Add 17 characters (total will be 22, exceeds 21!)
+sb.append(" world!!!!!!!!!");
+
+System.out.println("Length: " + sb.length());      // 22
+System.out.println("Capacity: " + sb.capacity());  // 44
+
+// New capacity calculation:
+// (old_capacity × 2) + 2
+// (21 × 2) + 2 = 44 ✓
+```
+
+---
+
+### **Growth Formula:**
+```
+When current length exceeds capacity:
+
+New Capacity = (Old Capacity × 2) + 2
+
+Example progression:
+Initial: 21
+After 1st growth: (21 × 2) + 2 = 44
+After 2nd growth: (44 × 2) + 2 = 90
+After 3rd growth: (90 × 2) + 2 = 182
+--------
+Why String is Immutable?
+
+1. 🔒 Security
+Strings are widely used for sensitive data — file paths, network connections, database URLs, usernames, class loading, etc.
+
+// If strings were mutable, an attacker could change the value after validation
+String url = "https://safe-site.com";
+// ... validation passes ...
+// If mutable: url could be changed to "https://malicious-site.com" before actual use
+
+2. String Pool / Interning (Memory Efficiency)
+String a = "hello";
+String b = "hello";
+// Both point to the SAME object in the string pool
+
+This is only safe because strings are immutable. If a could modify the shared string, b would be corrupted.
+
+Reason	            Benefit
+Security	        Prevents tampering after validation
+String Pool	        Enables memory sharing/optimization
+Thread Safety	    No synchronization needed
+
+
+Language	        Immutable	        Mutable Alternative
+Java	            String	            StringBuilder, StringBuffer
+
+-------
+difference between char[] and String
+
+// char[] → like a box
+char[] box = {'H', 'e', 'l', 'l', 'o'};
+box[0] = 'J';  // ✅ Change H to J → now it's "Jello"
+
+// String → like a note
+String note = "Hello";
+note = "Jello";  // ❌ Didn't change "Hello", created a NEW note "Jello"
+
+	                char[]	                                    String
+1. Size	            Fixed 🔒	                                Flexible 🔄
+2. Change	        Can change letters ✏️	                    Cannot change (creates new one) 📝
+3. Easy to use?	    Hard (do everything yourself) 🔧	        Easy (lots of built-in help) 🎁
+------
+
+String creation ways
+1.Using String Literal (Most Common)
+String s1 = "Hello";
+
+2.Using new Keyword
+String s2 = new String("Hello");
+
+3.Using char[] Array
+char[] letters = {'H', 'e', 'l', 'l', 'o'};
+String s3 = new String(letters);
+
+4.Using String.valueOf() or toString()
+
+5.StringBuilder / StringBuffer
+
+6.Using concat()
+String s9 = "Hello".concat(" World");
+
+7. Using + Operator
+String s10 = "Hello" + " " + "World";
+
+8.String.format(),String.join()
+-------
+String.intern()
+
+Without intern():
+─────────────────
+String a = "Hello";           → Goes to String Pool
+String b = new String("Hello"); → Goes to Heap (separate object)
+
+a == b  →  ❌ false (different memory locations)
+
+
+With intern():
+──────────────
+String a = "Hello";                    → Goes to String Pool
+String b = new String("Hello").intern(); → Checks pool → "Hello" exists → returns pool reference
+
+a == b  →  ✅ true (same memory location!)
+----
