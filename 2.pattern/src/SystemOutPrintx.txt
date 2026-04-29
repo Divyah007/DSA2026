@@ -1,0 +1,19 @@
+System.out.print/ln/f() can take any data type in Java.
+
+ex.
+System.out.print(10);        // int
+System.out.print(10L);       // long
+System.out.print(10.5f);     // float
+System.out.print(10.5);      // double
+System.out.print('A');       // char
+System.out.print(true);      // boolean
+System.out.print("Hello");   // String
+
+int[] arr = {1,2,3};
+System.out.print(arr);       // prints reference like [I@15db9742
+
+class A {}
+A obj = new A();
+System.out.print(obj);       // prints reference unless toString() overridden
+if you pass any object → Java calls obj.toString()
+If toString() is not overridden → you get class name + hashcode
